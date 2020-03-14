@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -57,9 +59,6 @@ class SwingChat {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (jarea.getText().equals("Выберите получателя!")) {
-                    jarea.setText("");
-                }
                 jarea.setText(jarea.getText() + "\n" + txt.getText() + "\n" + txt.getText());
                 txt.setText("");
             }
@@ -72,6 +71,12 @@ class SwingChat {
                     }
                 }
         );
+
+        txt.addActionListener(e -> {
+            jarea.setText(jarea.getText() + "\n" + txt.getText() + "\n" + txt.getText());
+            txt.setText("");
+        });
+
     }
 
     SwingChat() {
