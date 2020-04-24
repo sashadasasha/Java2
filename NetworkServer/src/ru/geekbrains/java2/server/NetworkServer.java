@@ -32,21 +32,6 @@ public class NetworkServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Клиент подключился");
                 ClientHandler ch = createClientHandler(clientSocket);
-                Thread th = new Thread(() -> {
-                    try {
-                        Thread.sleep(120*1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (ch.getSuccessfulAuth()) {
-                        Thread.currentThread().interrupt();
-                    } else {
-                        System.out.println("!!!No auth");
-                        ch.closeConnection();
-                    }
-                });
-                th.start();
-
             }
 
         } catch (IOException e) {

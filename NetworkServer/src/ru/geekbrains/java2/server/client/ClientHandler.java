@@ -16,6 +16,7 @@ public class ClientHandler {
 
     private final NetworkServer networkServer;
     private final Socket clientSocket;
+    private Thread th;
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -36,6 +37,16 @@ public class ClientHandler {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
+            th = new Thread(() -> {
+                try {
+                    Thread.sleep(12*1000);
+                    System.out.println("!!!No auth");
+                    this.closeConnection();
+                } catch (InterruptedException e) {
+                    System.out.println("Клиент авторизовался");
+                }
+            });
+            th.start();
             new Thread(() -> {
                 try {
                     authentication();
@@ -46,6 +57,8 @@ public class ClientHandler {
                     closeConnection();
                 }
             }).start();
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,6 +124,7 @@ public class ClientHandler {
             if (command.getType() == CommandType.AUTH) {
                 successfulAuth = processAuthCommand(command);
                 if (successfulAuth){
+                    th.interrupt();
                     return;
                 }
             } else {
